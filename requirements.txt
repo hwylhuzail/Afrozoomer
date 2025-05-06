@@ -1,5 +1,5 @@
 # This file is used to install the required packages for the project.
-flask==2.1.2
+flask==2.2.3
 python-dotenv==1.0.0
 gunicorn
 
