@@ -134,13 +134,21 @@ class AfroZoomerAssistant:
             context = self.get_contextual_faq(user_input)
 
             messages = [
-                {"role": "system", "content": "You are AfroZoomer, an assistant who answers questions about Zoomer Africa."},
+                {
+                    "role": "system",
+                    "content": (
+                        "You are AfroZoomer, an assistant for Zoomer Africa. "
+                        "Provide helpful and accurate answers, but keep them short and summarized "
+                        "so users on mobile can quickly understand. If needed, provide a short example or tip."
+                        "Aim to answer clearly in under 200 words. Avoid unnecessary elaboration."
+                    )
+                },
                 {"role": "user", "content": f"Context:\n{context}\n\nQuestion: {user_input}"}
             ]
             response = client.chat.completions.create(
                 model="Qwen/Qwen3-8B",
                 messages=messages,
-                max_tokens=4096,
+                max_tokens=1000,
                 temperature=0.6,
                 top_p=0.9,
             )
