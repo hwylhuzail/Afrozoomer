@@ -6,5 +6,7 @@ werkzeug==2.0.3
 openai>=1.77.0
 python-docx
 numpy
+faiss-cpu
+
 
 
