@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Zoomer Africa</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
@@ -33,6 +33,10 @@
             flex-direction: column;
             align-items: center;
             color: var(--dark);
+        }
+
+        html {
+            scroll-behavior: smooth;
         }
 
         .container {
@@ -340,6 +344,27 @@
                 font-size: 14px;
             }
         }
+
+        /* Make everything stack on small screens */
+        @media screen and (max-width: 768px) {
+            .chat-container {
+                padding: 6px;
+            }
+
+            .chat-input {
+                flex-direction: column;
+            }
+
+            /* .chat-input input,
+            .chat-input button {
+                width: auto;
+            } */
+
+            .message-content {
+                max-width: 90%;
+                font-size: 14px;
+            }
+        }
         
         .user-message .message-content {
             background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
@@ -601,7 +626,7 @@
                             <div class="screenshot-item">
                                 <h3>Our Platform</h3>
                                 <p>Connecting African voices</p>
-                                <img src="/api/placeholder/400/320" alt="Our Platform Screenshot">
+                                <img src="https://ucarecdn.com/27beb8d8-7f09-47ae-a28d-22a0a5bc826e/-/format/auto/" alt="Our Platform Screenshot">
                                 <ul>
                                     <li>Developed by Transparent Hub Uganda Limited (THUL)</li>
                                     <li>Focus on authentic African storytelling</li>
@@ -628,7 +653,7 @@
                             <div class="screenshot-item">
                                 <h3>Content Creation</h3>
                                 <p>Express your African story</p>
-                                <img src="/api/placeholder/400/320" alt="Content Creation Screenshot">
+                                <img src="https://ucarecdn.com/27beb8d8-7f09-47ae-a28d-22a0a5bc826e/-/format/auto/" alt="Content Creation Screenshot">
                                 <ul>
                                     <li>Rich text editor for storytelling</li>
                                     <li>Image and media sharing</li>
@@ -655,7 +680,7 @@
                             <div class="screenshot-item">
                                 <h3>Engagement Tools</h3>
                                 <p>Connect with the community</p>
-                                <img src="/api/placeholder/400/320" alt="Engagement Tools Screenshot">
+                                <img src="https://ucarecdn.com/27beb8d8-7f09-47ae-a28d-22a0a5bc826e/-/format/auto/" alt="Engagement Tools Screenshot">
                                 <ul>
                                     <li>Real-time content sharing</li>
                                     <li>Comments and reactions</li>
