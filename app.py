@@ -21,7 +21,7 @@ client = OpenAI(
 
 # ===== Load and Embed Zoomer Africa FAQ =====
 doc = Document("zoomer_faqs.docx")
-faq_chunks = [para.text.strip() for para in doc.paragraphs if para.text.strip()]
+faq_chunks = [para.text.strip() for para in doc.paragraphs if para.text.strip()][:50]  # Limit to 50 chunks for now
 
 # Add backoff decorator to handle rate limiting
 @backoff.on_exception(backoff.expo, 
@@ -40,6 +40,7 @@ def get_embedding(text):
         raise  # Let backoff handle the retry
 
 # ========== AfroZoomer Assistant Class ==========
+
 class AfroZoomerAssistant:
     def __init__(self):
         self.name = "AfroZoomer"
@@ -81,7 +82,7 @@ class AfroZoomerAssistant:
         
         # Process chunks in small batches to avoid rate limits
         all_embeddings = []
-        batch_size = 5  # Adjust based on API limits
+        batch_size = 2  # Reduced to limit memory usage
         
         for i in range(0, len(self.faq_chunks), batch_size):
             batch = self.faq_chunks[i:i+batch_size]
@@ -132,8 +133,6 @@ class AfroZoomerAssistant:
         try:
             context = self.get_contextual_faq(user_input)
 
-            # thinking = "[thinking]Looking through Zoomer Africa information...\nAnalyzing context and finding best answer.[/thinking]"
-
             messages = [
                 {"role": "system", "content": "You are AfroZoomer, an assistant who answers questions about Zoomer Africa."},
                 {"role": "user", "content": f"Context:\n{context}\n\nQuestion: {user_input}"}
@@ -141,7 +140,7 @@ class AfroZoomerAssistant:
             response = client.chat.completions.create(
                 model="Qwen/Qwen3-8B",
                 messages=messages,
-                max_tokens=4096,
+                max_tokens=400,
                 temperature=0.6,
                 top_p=0.9,
             )
@@ -150,26 +149,26 @@ class AfroZoomerAssistant:
             print(f"Error getting response: {e}")
             return f"I'm sorry, I encountered an error: {str(e)}. Please try again later."
 
-# Initialize assistant on first request instead of at startup
-assistant = None
-
-def get_assistant():
-    global assistant
-    if assistant is None:
-        assistant = AfroZoomerAssistant()
-    return assistant
+# Initialize assistant globally
+print("Initializing AfroZoomer assistant...")
+assistant = AfroZoomerAssistant()
+print("AfroZoomer is ready!")
 
 # ========== Flask Routes ==========
+
 @app.route('/')
 def home():
     return render_template("zoomer.html")
 
 @app.route('/ask', methods=['POST'])
 def ask():
-    user_input = request.form['user_input']
-    assistant = get_assistant()  # Get or initialize assistant
-    response = assistant.get_response(user_input)
-    return jsonify({'response': response})
+    try:
+        user_input = request.form['user_input']
+        response = assistant.get_response(user_input)
+        return jsonify({'response': response})
+    except Exception as e:
+        print("Fatal error in /ask:", e)
+        return jsonify({'response': "Oops! Internal assistant error."}), 500
 
 if __name__ == "__main__":
     # Listen on the right port for Render

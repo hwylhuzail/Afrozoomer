@@ -1,4 +1,4 @@
-start: gunicorn app:app
+start: gunicorn app:app --workers=1
 
 services:
   - type: web
