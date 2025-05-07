@@ -140,7 +140,7 @@ class AfroZoomerAssistant:
             response = client.chat.completions.create(
                 model="Qwen/Qwen3-8B",
                 messages=messages,
-                max_tokens=400,
+                max_tokens=4096,
                 temperature=0.6,
                 top_p=0.9,
             )
