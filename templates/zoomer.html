@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Zoomer Africa</title>
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='image/chatbot.png') }}">
+    <link rel="apple-touch-icon" href="{{ url_for('static', filename='image/chatbot.png') }}">
+
+    <!-- SVG favicon -->
+    <!-- <link rel="icon" href="/favicon.svg" type="image/svg+xml"> -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <style>
@@ -732,7 +737,7 @@
                         <span>A</span>
                     </div>
                     <div class="message-content assistant-content">
-                        <p>Hello! I'm AfroZoomer, your guide to all things Zoomer Africa. How can I help you today?</p>
+                        <p>👋🏾 Hello there! I'm AfroZoomer — your chatty, friendly AI buddy here to guide you through Zoomer Africa. What can I help with today? 🚀</p>
                     </div>
                 </div>
             </div>
@@ -740,7 +745,7 @@
             <div class="chat-input">
                 <form id="chatForm">
                     <div class="input-area">
-                        <input type="text" id="userInput" placeholder="Ask me anything about Zoomer Africa..." required>
+                        <input type="text" id="userInput" placeholder="Ask me anything about Zoomer..." required>
                         <button type="submit" class="send-button">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
