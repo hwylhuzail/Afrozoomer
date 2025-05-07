@@ -4,34 +4,35 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Zoomer Africa</title>
-    <link rel="icon" href="/favicon.ico" sizes="any">
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180">
-    <link rel="icon" href="/afro-zoomer-avater.jpeg" sizes="32x32" type="image/png">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <style>
-        :root {
-            --deepseek-primary: #7e6cef;
-            --deepseek-secondary: #554bb9;
-            --deepseek-bg: #f9f9fb;
-            --deepseek-sidebar: #ffffff;
-            --deepseek-text: #222222;
-            --deepseek-light-text: #6b7280;
-            --deepseek-border: #e5e7eb;
-            --deepseek-shadow: rgba(0, 0, 0, 0.06);
-            --deepseek-user-bubble: #eff6ff;
-            --deepseek-ai-bubble: #ffffff;
-        }
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
         
+        :root {
+            --primary: #6366F1;
+            --primary-dark: #4F46E5;
+            --secondary: #EC4899;
+            --accent: #8B5CF6;
+            --light: #F9FAFB;
+            --dark: #1F2937;
+            --gray-100: #F3F4F6;
+            --gray-200: #E5E7EB;
+            --gray-300: #D1D5DB;
+            --gray-600: #4B5563;
+            --gray-800: #1F2937;
+        }
+
         body {
-            font-family: sans-serif;
+            font-family: 'Poppins', sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f3f4f6;
+            background-color: #F8FAFC;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
+            color: var(--dark);
         }
 
         .container {
@@ -40,14 +41,17 @@
             width: 100%;
         }
 
+        /* Navbar styles */
         nav {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
-            background-color: #fff;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            background-color: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
             z-index: 50;
+            border-bottom: 1px solid rgba(229, 231, 235, 0.5);
         }
 
         .nav-inner {
@@ -61,25 +65,30 @@
 
         .nav-title {
             font-size: 1.5rem;
-            font-weight: bold;
-            color: #357AFF;
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--primary) 0%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.5px;
         }
 
         .nav-links a {
-            color: #4a5568;
+            color: var(--gray-600);
             margin-left: 20px;
             text-decoration: none;
+            transition: all 0.2s ease;
         }
 
         .nav-links a:hover {
-            color: #357AFF;
+            color: var(--primary);
         }
 
+        /* Main content */
         .main-content {
-            padding-top: 80px; /* Adjust based on nav height */
+            padding-top: 80px;
             display: grid;
             grid-template-columns: 1fr;
-            gap: 20px;
+            gap: 24px;
         }
 
         @media (min-width: 768px) {
@@ -90,63 +99,95 @@
 
         .platform-guide, .ask-afrozoomer {
             background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            padding: 24px;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+            transition: all 0.3s ease;
+        }
+
+        .platform-guide:hover, .ask-afrozoomer:hover {
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
         }
 
         .platform-guide h1 {
             font-size: 1.75rem;
-            font-weight: bold;
-            margin-bottom: 15px;
-            color: #1a202c;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--dark);
+            letter-spacing: -0.5px;
+            background: linear-gradient(90deg, var(--primary) 0%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
+        /* Section styles */
         .section {
-            border: 1px solid #e2e8f0;
-            border-radius: 6px;
-            margin-bottom: 15px;
+            border: 1px solid var(--gray-200);
+            border-radius: 12px;
+            margin-bottom: 16px;
             overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .section:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
         }
 
         .section-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 15px;
+            padding: 16px;
             cursor: pointer;
+            background-color: #fff;
+            transition: background-color 0.2s;
+        }
+
+        .section-header:hover {
+            background-color: rgba(99, 102, 241, 0.05);
+        }
+
+        .flex-title {
+            display: flex;
+            align-items: center;
         }
 
         .section-header .icon {
-            margin-right: 10px;
-            color: #357AFF;
+            margin-right: 12px;
+            color: var(--primary);
+            font-size: 1.1rem;
         }
 
         .section-header .title {
-            font-weight: medium;
-            color: #1a202c;
+            font-weight: 600;
+            color: var(--dark);
         }
 
         .section-header .arrow {
-            color: #718096;
+            color: var(--gray-600);
+            transition: transform 0.3s ease;
         }
 
         .section-content {
-            padding: 15px;
-            background-color: #f7fafc;
-            display: none; /* Initially hidden */
+            padding: 20px;
+            background-color: #FAFBFF;
+            display: none;
+            border-top: 1px solid var(--gray-200);
         }
 
         .section-content p {
-            color: #4a5568;
-            margin-bottom: 10px;
+            color: var(--gray-600);
+            margin-bottom: 16px;
+            line-height: 1.6;
         }
 
+        /* Screenshots grid */
         .screenshots-grid {
             display: grid;
             grid-template-columns: 1fr;
-            gap: 15px;
-            margin-top: 15px;
+            gap: 20px;
+            margin-top: 16px;
         }
 
         @media (min-width: 768px) {
@@ -156,185 +197,377 @@
         }
 
         .screenshot-item {
-            border: 1px solid #e2e8f0;
-            border-radius: 6px;
-            padding: 15px;
+            border: 1px solid var(--gray-200);
+            border-radius: 12px;
+            padding: 20px;
+            background-color: #fff;
+            transition: all 0.3s ease;
+        }
+
+        .screenshot-item:hover {
+            border-color: var(--primary);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
         }
 
         .screenshot-item h3 {
-            font-size: 1rem;
-            font-weight: medium;
-            margin-bottom: 5px;
-            color: #1a202c;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--dark);
         }
 
         .screenshot-item p {
-            font-size: 0.875rem;
-            color: #718096;
-            margin-bottom: 10px;
+            font-size: 0.9rem;
+            color: var(--gray-600);
+            margin-bottom: 12px;
         }
 
         .screenshot-item img {
             max-width: 100%;
             height: auto;
-            border-radius: 4px;
-            margin-bottom: 10px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .screenshot-item img:hover {
+            transform: scale(1.02);
         }
 
         .screenshot-item ul {
-            list-style-type: disc;
-            padding-left: 20px;
-            color: #718096;
-            font-size: 0.875rem;
+            list-style-type: none;
+            padding-left: 8px;
+            color: var(--gray-600);
+            font-size: 0.9rem;
         }
 
-        .ask-afrozoomer h2 {
-            font-size: 1.25rem;
-            font-weight: bold;
-            margin-bottom: 15px;
-            color: #1a202c;
+        .screenshot-item ul li {
+            margin-bottom: 6px;
+            position: relative;
+            padding-left: 18px;
+        }
+
+        .screenshot-item ul li:before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 8px;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background-color: var(--primary);
+        }
+
+        /* AfroZoomer Chat Styles */
+        .ask-afrozoomer {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .chat-header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            color: white;
+            border-radius: 12px 12px 0 0;
+            padding: 20px;
+            margin: -24px -24px 0;
+        }
+        
+        .chat-header h2 {
+            font-size: 1.3rem;
+            font-weight: 600; 
             display: flex;
             align-items: center;
         }
 
-        /* .ask-afrozoomer {
-            width: 100%;
-            max-width: 700px;
-            margin: 50px auto;
-            background-color: #fff;
-            border-radius: 12px;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+        .chat-messages {
+            flex: 1;
+            min-height: 100px;
+            max-height: 65vh;
+            overflow-y: auto;
+            padding: 20px 0;
+            scrollbar-width: thin;
+            scrollbar-color: var(--gray-300) transparent;
+        }
+        
+        .chat-messages::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .chat-messages::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        
+        .chat-messages::-webkit-scrollbar-thumb {
+            background-color: var(--gray-300);
+            border-radius: 6px;
+        }
+        
+        .message {
+            margin-bottom: 20px;
             display: flex;
-            flex-direction: column;
-            overflow: hidden;
-        } */
-
-        .ask-afrozoomer h2 img {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            margin-right: 10px;
+            align-items: flex-start;
+            animation: fadeInUp 0.3s ease-in-out;
         }
-
-        .chat-message {
-            position: relative;
-            margin-bottom: 12px;
-            padding: 10px 14px;
-            border-radius: 18px;
-            max-width: 70%;
-            font-size: 0.95em;
-            line-height: 1.5;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-            word-break: break-word;
-            clear: both;
-            display: inline-block;
-        }
-
+        
         .user-message {
-            background-color: #357AFF;
+            justify-content: flex-end;
+        }
+        
+        .assistant-message {
+            justify-content: flex-start;
+        }
+        
+        .message-content {
+            max-width: 60%;
+            padding: 12px 16px;
+            border-radius: 18px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            line-height: 1.6;
+            word-wrap: break-word;
+        }
+
+        /* Responsive: full width messages on small screens */
+        @media (max-width: 600px) {
+            .message-content {
+                max-width: 80%;
+                font-size: 14px;
+            }
+
+            .avatar {
+                width: 32px;
+                height: 32px;
+                font-size: 14px;
+            }
+        }
+        
+        .user-message .message-content {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
             color: white;
-            float: right;
             border-bottom-right-radius: 4px;
         }
-
-        .assistant-message {
-            background-color: #f1f1f1;
-            color: #333;
-            float: left;
+        
+        .assistant-message .message-content {
+            background-color: #F3F4F6;
+            color: var(--gray-800);
             border-bottom-left-radius: 4px;
         }
 
-        .chat-area {
-            border: 1px solid #e2e8f0;
-            border-radius: 6px;
-            padding: 15px;
-            height: 400px;
-            overflow-y: auto;
-            margin-bottom: 15px;
-            background-color: #ffffff;
+        /* Smooth fade-in animation for messages */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
-
-        /* Chat bubble tails */
-        .chat-message::after {
-            content: "";
-            position: absolute;
-            width: 0;
-            height: 0;
-            border-style: solid;
-        }
-
-        .user-message::after {
-            border-width: 8px 0 8px 10px;
-            border-color: transparent transparent transparent #357AFF;
-            right: -10px;
-            top: 10px;
-        }
-
-        .assistant-message::after {
-            border-width: 8px 10px 8px 0;
-            border-color: transparent #f1f1f1 transparent transparent;
-            left: -10px;
-            top: 10px;
-        }
-
-
-        .chat-input-area {
-            display: flex;
-        }
-
-        .chat-input {
-            flex-grow: 1;
-            padding: 10px;
-            border: 1px solid #e2e8f0;
-            border-radius: 6px 0 0 6px;
-            outline: none;
-        }
-
-        .send-button {
-            background-color: #357AFF;
-            color: #fff;
-            padding: 10px 15px;
-            border: none;
-            border-radius: 0 6px 6px 0;
-            cursor: pointer;
-        }
-
-        .send-button:hover {
-            background-color: #2e69de;
-        }
-        .typing-indicator {
+        
+        .avatar {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            margin: 0 8px;
             display: flex;
             align-items: center;
-            margin: 10px 0 10px 10px;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            flex-shrink: 0;
         }
-
-        .typing-dots {
+        
+        .user-avatar {
+            background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%);
+        }
+        
+        .assistant-avatar {
+            background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+        }
+        
+        .chat-input {
+            padding: 16px 0 0;
+            border-top: 1px solid var(--gray-200);
+            margin-top: 10px;
+        }
+        
+        .input-area {
             display: flex;
-            gap: 5px;
+            align-items: center;
+            background-color: var(--gray-100);
+            border-radius: 24px;
+            padding: 6px 8px 6px 16px;
+            border: 1px solid var(--gray-200);
+            transition: all 0.3s ease;
         }
-
-        .typing-dot {
+        
+        .input-area:focus-within {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+        }
+        
+        .input-area input {
+            flex: 1;
+            border: none;
+            background: transparent;
+            padding: 10px;
+            font-size: 16px;
+            outline: none;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .send-button {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 38px;
+            height: 38px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .send-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .thinking {
+            font-style: italic;
+            color: var(--gray-600);
+            background-color: #F3F4F6;
+            padding: 10px 14px;
+            border-radius: 12px;
+            margin-top: 10px;
+            display: inline-block;
+            position: relative;
+        }
+        
+        /* Markdown-like styling for assistant responses */
+        .assistant-content p {
+            margin-bottom: 12px;
+        }
+        
+        .assistant-content strong, 
+        .assistant-content b {
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        .assistant-content em,
+        .assistant-content i {
+            font-style: italic;
+            color: var(--gray-600);
+        }
+        
+        .assistant-content h1, 
+        .assistant-content h2, 
+        .assistant-content h3 {
+            font-weight: 600;
+            margin-top: 16px;
+            margin-bottom: 8px;
+            color: var(--dark);
+        }
+        
+        .assistant-content h1 {
+            font-size: 1.5em;
+        }
+        
+        .assistant-content h2 {
+            font-size: 1.3em;
+        }
+        
+        .assistant-content h3 {
+            font-size: 1.1em;
+        }
+        
+        .assistant-content ul, 
+        .assistant-content ol {
+            padding-left: 20px;
+            margin-bottom: 12px;
+        }
+        
+        .assistant-content ul li {
+            list-style-type: disc;
+            margin-bottom: 6px;
+        }
+        
+        .assistant-content ol li {
+            list-style-type: decimal;
+            margin-bottom: 6px;
+        }
+        
+        .assistant-content code {
+            font-family: monospace;
+            background-color: var(--gray-200);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        
+        .assistant-content pre {
+            background-color: var(--dark);
+            color: var(--light);
+            padding: 14px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin-bottom: 14px;
+        }
+        
+        .assistant-content pre code {
+            background-color: transparent;
+            color: inherit;
+            padding: 0;
+        }
+        
+        .assistant-content blockquote {
+            border-left: 4px solid var(--primary);
+            padding-left: 12px;
+            color: var(--gray-600);
+            font-style: italic;
+            margin: 12px 0;
+        }
+        
+        /* Loading animation */
+        .dot-typing {
+            position: relative;
+            left: -9999px;
             width: 8px;
             height: 8px;
-            background-color: #aaa;
-            border-radius: 50%;
-            animation: blink 1.4s infinite ease-in-out both;
+            border-radius: 5px;
+            background-color: var(--gray-600);
+            color: var(--gray-600);
+            box-shadow: 9984px 0 0 0 var(--gray-600), 9999px 0 0 0 var(--gray-600), 10014px 0 0 0 var(--gray-600);
+            animation: dot-typing 1.5s infinite linear;
         }
 
-        .typing-dot:nth-child(2) {
-            animation-delay: 0.2s;
-        }
-
-        .typing-dot:nth-child(3) {
-            animation-delay: 0.4s;
-        }
-
-        @keyframes blink {
-            0%, 80%, 100% {
-                opacity: 0;
+        @keyframes dot-typing {
+            0% {
+                box-shadow: 9984px 0 0 0 var(--gray-600), 9999px 0 0 0 var(--gray-600), 10014px 0 0 0 var(--gray-600);
             }
-            40% {
-                opacity: 1;
+            16.667% {
+                box-shadow: 9984px -8px 0 0 var(--gray-600), 9999px 0 0 0 var(--gray-600), 10014px 0 0 0 var(--gray-600);
+            }
+            33.333% {
+                box-shadow: 9984px 0 0 0 var(--gray-600), 9999px 0 0 0 var(--gray-600), 10014px 0 0 0 var(--gray-600);
+            }
+            50% {
+                box-shadow: 9984px 0 0 0 var(--gray-600), 9999px -8px 0 0 var(--gray-600), 10014px 0 0 0 var(--gray-600);
+            }
+            66.667% {
+                box-shadow: 9984px 0 0 0 var(--gray-600), 9999px 0 0 0 var(--gray-600), 10014px 0 0 0 var(--gray-600);
+            }
+            83.333% {
+                box-shadow: 9984px 0 0 0 var(--gray-600), 9999px 0 0 0 var(--gray-600), 10014px -8px 0 0 var(--gray-600);
+            }
+            100% {
+                box-shadow: 9984px 0 0 0 var(--gray-600), 9999px 0 0 0 var(--gray-600), 10014px 0 0 0 var(--gray-600);
             }
         }
     </style>
@@ -368,7 +601,7 @@
                             <div class="screenshot-item">
                                 <h3>Our Platform</h3>
                                 <p>Connecting African voices</p>
-                                <img src="https://ucarecdn.com/27beb8d8-7f09-47ae-a28d-22a0a5bc826e/-/format/auto/" alt="Our Platform Screenshot">
+                                <img src="/api/placeholder/400/320" alt="Our Platform Screenshot">
                                 <ul>
                                     <li>Developed by Transparent Hub Uganda Limited (THUL)</li>
                                     <li>Focus on authentic African storytelling</li>
@@ -395,7 +628,7 @@
                             <div class="screenshot-item">
                                 <h3>Content Creation</h3>
                                 <p>Express your African story</p>
-                                <img src="https://ucarecdn.com/27beb8d8-7f09-47ae-a28d-22a0a5bc826e/-/format/auto/" alt="Content Creation Screenshot">
+                                <img src="/api/placeholder/400/320" alt="Content Creation Screenshot">
                                 <ul>
                                     <li>Rich text editor for storytelling</li>
                                     <li>Image and media sharing</li>
@@ -422,7 +655,7 @@
                             <div class="screenshot-item">
                                 <h3>Engagement Tools</h3>
                                 <p>Connect with the community</p>
-                                <img src="https://ucarecdn.com/27beb8d8-7f09-47ae-a28d-22a0a5bc826e/-/format/auto/" alt="Engagement Tools Screenshot">
+                                <img src="/api/placeholder/400/320" alt="Engagement Tools Screenshot">
                                 <ul>
                                     <li>Real-time content sharing</li>
                                     <li>Comments and reactions</li>
@@ -464,17 +697,32 @@
         </div>
 
         <div class="ask-afrozoomer">
-            <h2 style="font-size: 1.5rem; font-weight: bold; color: #357AFF; display: flex; align-items: center;">
-                <!-- <img src="afro-zoomer-avater.jpeg" alt=""> -->
-                Ask AfroZoomer
-            </h2>
-            <div class="chat-area" id="chatArea">
+            <div class="chat-header">
+                <h2 class="text-xl font-bold">AfroZoomer Assistant</h2>
+            </div>
+            
+            <div class="chat-messages" id="chatMessages">
+                <div class="message assistant-message">
+                    <div class="avatar assistant-avatar">
+                        <span>A</span>
+                    </div>
+                    <div class="message-content assistant-content">
+                        <p>Hello! I'm AfroZoomer, your guide to all things Zoomer Africa. How can I help you today?</p>
+                    </div>
                 </div>
-            <div class="chat-input-area">
-                <input type="text" class="chat-input" id="queryInput" placeholder="Ask about Zoomer Africa...">
-                <button id="afrozoomer-input" class="send-button">
-                    <i class="fas fa-paper-plane"></i>
-                </button>
+            </div>
+            
+            <div class="chat-input">
+                <form id="chatForm">
+                    <div class="input-area">
+                        <input type="text" id="userInput" placeholder="Ask me anything about Zoomer Africa..." required>
+                        <button type="submit" class="send-button">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                            </svg>
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -492,90 +740,175 @@
 
         // AfroZoomer AI Assistant Script       
         document.addEventListener('DOMContentLoaded', function() {
-                const chatContainer = document.getElementById('chatArea');
-                const inputField = document.getElementById('queryInput');
-                const askButton = document.getElementById('afrozoomer-input');
-
-                // Display initial message
-                addMessage("👋🏾 Hello there! I'm AfroZoomer — your chatty, friendly AI buddy here to guide you through Zoomer Africa. What can I help with today? 🚀", 'assistant');
-
-                // Handle Ask button
-                askButton.addEventListener('click', askQuestion);
-
-                // Handle Enter key
-                inputField.addEventListener('keypress', function(e) {
-                    if (e.key === 'Enter') {
-                        askQuestion();
-                    }
-                });
-
-                function askQuestion() {
-                    const userInput = inputField.value.trim();
-
-                    if (userInput) {
-                        addMessage(userInput, 'user');
-                        inputField.value = '';
-
-                        // Show "typing..." message
-                        const typingMessage = addMessage("AfroZoomer is typing...", 'assistant', true);
-
-                        fetch('/ask', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/x-www-form-urlencoded',
-                            },
-                            body: `user_input=${encodeURIComponent(userInput)}`,
-                        })
-                        .then(response => response.json())
-                        .then(data => {
-                            // Simulate delay before showing actual response
-                            setTimeout(() => {
-                                // Remove "typing..." placeholder
-                                typingMessage.remove();
-                                addMessage(data.response, 'assistant');
-                                chatContainer.scrollTop = chatContainer.scrollHeight;
-                            }, 1200); // Delay in milliseconds
-                        })
-                        .catch(error => {
-                            typingMessage.remove();
-                            console.error('Error:', error);
-                            addMessage("Oops! 😬 Something went wrong. Try again shortly, okay?", 'assistant');
-                        });
-                    }
-                }
-
-                function addMessage(text, sender, isTemporary = false) {
-                    const messageDiv = document.createElement('div');
-                    messageDiv.classList.add('chat-message');
-                    messageDiv.classList.add(sender === 'user' ? 'user-message' : 'assistant-message');
-
-                    const icon = document.createElement('i');
-                    icon.className = sender === 'user' ? 'fas fa-user-circle' : 'fas fa-robot';
-                    icon.style.marginRight = '10px';
-                    icon.style.fontSize = '1.2em';
-
-                    //const messageContent = document.createElement('span');
-                    //messageContent.textContent = text;
-                    messageDiv.textContent = text;
-                    chatContainer.appendChild(messageDiv);
-                    chatContainer.scrollTop = chatContainer.scrollHeight;
-
-                    return messageDiv;
+            const chatForm = document.getElementById('chatForm');
+            const userInput = document.getElementById('userInput');
+            const chatMessages = document.getElementById('chatMessages');
+            const chatMessage = document.querySelector('.chat-messages');
+            const observer = new MutationObserver(() => {
+                if (chatMessage.children.length > 0) {
+                    chatMessage.style.overflowY = 'auto';
+                } else {
+                    chatMessage.style.overflowY = 'hidden';
                 }
             });
+            observer.observe(chatMessage, { childList: true });
+            
+            chatForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const userMessage = userInput.value.trim();
+                if (userMessage === '') return;
+                
+                // Add user message to the chat
+                addMessage('user', userMessage);
+                
+                // Show thinking indicator
+                const thinkingId = addThinking();
+                
+                // Clear input
+                userInput.value = '';
+                
+                // Send message to the server
+                fetch('/ask', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: 'user_input=' + encodeURIComponent(userMessage)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    // Remove thinking indicator
+                    removeThinking(thinkingId);
+                    
+                    // Process the response to convert markdown-like syntax
+                    const formattedResponse = formatResponse(data.response);
+                    
+                    // Add assistant response
+                    addMessage('assistant', formattedResponse);
+                    
+                    // Scroll to bottom
+                    scrollToBottom();
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    removeThinking(thinkingId);
+                    addMessage('assistant', 'Sorry, I encountered an error. Please try again.');
+                });
+            });
+            
+            function addMessage(sender, content) {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `message ${sender}-message`;
 
-            // const eventSource = new EventSource('/stream'); // Connect to the stream endpoint
+                const avatar = document.createElement('div');
+                avatar.className = `avatar ${sender}-avatar`;
+                avatar.innerHTML = `<span>${sender === 'user' ? 'U' : 'A'}</span>`;
 
-            // eventSource.onmessage = function(event) {
-            //     // event.data contains each word from the server
-            //     const word = event.data;
-            //     document.getElementById('response').innerText += word + ' ';
-            // };
+                const messageContent = document.createElement('div');
+                messageContent.className = `message-content ${sender === 'assistant' ? 'assistant-content' : ''}`;
 
+                if (sender === 'assistant') {
+                    messageContent.innerHTML = content;
+                    messageDiv.appendChild(avatar);          // Avatar on left
+                    messageDiv.appendChild(messageContent);
+                } else {
+                    messageContent.textContent = content;
+                    messageDiv.appendChild(messageContent);  // Message first
+                    messageDiv.appendChild(avatar);          // Avatar on right
+                }
 
-            function setQuestion(question) {
-                document.getElementById('afrozoomer-input').value = question;
+                chatMessages.appendChild(messageDiv);
+                scrollToBottom();
             }
+
+            
+            function addThinking() {
+                const thinkingId = 'thinking-' + Date.now();
+                const thinkingDiv = document.createElement('div');
+                thinkingDiv.className = 'message assistant-message';
+                thinkingDiv.id = thinkingId;
+                
+                const avatar = document.createElement('div');
+                avatar.className = 'avatar assistant-avatar';
+                avatar.innerHTML = '<span>A</span>';
+                
+                const messageContent = document.createElement('div');
+                messageContent.className = 'message-content';
+                messageContent.innerHTML = '<div class="thinking"><div class="dot-typing"></div></div>';
+                
+                thinkingDiv.appendChild(avatar);
+                thinkingDiv.appendChild(messageContent);
+                
+                chatMessages.appendChild(thinkingDiv);
+                scrollToBottom();
+                
+                return thinkingId;
+            }
+            
+            function removeThinking(thinkingId) {
+                const thinkingDiv = document.getElementById(thinkingId);
+                if (thinkingDiv) {
+                    thinkingDiv.remove();
+                }
+            }
+            
+            function scrollToBottom() {
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+            
+            function formatResponse(text) {
+                if (!text) return '';
+                
+                // Process markdown-like formatting
+                let formatted = text
+                    // Handle paragraphs - ensure double newlines become proper paragraphs
+                    .replace(/\n\s*\n/g, '</p><p>')
+                    
+                    // Handle bold text with ** or __
+                    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                    .replace(/__(.*?)__/g, '<strong>$1</strong>')
+                    
+                    // Handle italic text with * or _
+                    .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                    .replace(/_(.*?)_/g, '<em>$1</em>')
+                    
+                    // Handle headings (# Heading)
+                    .replace(/^# (.*?)$/gm, '<h1>$1</h1>')
+                    .replace(/^## (.*?)$/gm, '<h2>$1</h2>')
+                    .replace(/^### (.*?)$/gm, '<h3>$1</h3>')
+                    
+                    // Handle lists
+                    .replace(/^\s*\* (.*?)$/gm, '<li>$1</li>')
+                    .replace(/^\s*- (.*?)$/gm, '<li>$1</li>')
+                    .replace(/^\s*\d+\. (.*?)$/gm, '<li>$1</li>')
+                    
+                    // Handle code blocks
+                    .replace(/```([\s\S]*?)```/g, '<pre><code>$1</code></pre>')
+                    
+                    // Handle inline code
+                    .replace(/`(.*?)`/g, '<code>$1</code>')
+                    
+                    // Handle blockquotes
+                    .replace(/^\> (.*?)$/gm, '<blockquote>$1</blockquote>')
+                    
+                    // Handle "thinking" blocks
+                    .replace(/\[thinking\]([\s\S]*?)\[\/thinking\]/g, '<div class="thinking">$1</div>');
+                
+                // Wrap in paragraph tags if not already wrapped
+                if (!formatted.startsWith('<')) {
+                    formatted = '<p>' + formatted;
+                }
+                if (!formatted.endsWith('>')) {
+                    formatted = formatted + '</p>';
+                }
+                
+                return formatted;
+            }
+            
+            // Initial focus on input
+            userInput.focus();
+        });
     </script>
 </body>
 </html>

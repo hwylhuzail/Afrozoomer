@@ -1,1 +1,11 @@
 start: gunicorn app:app
+
+services:
+  - type: web
+    # other configuration
+    env:
+      - key: PORT
+        value: 8000
+
+
+  
