@@ -20,8 +20,22 @@ client = OpenAI(
 )
 
 # ===== Load and Embed Zoomer Africa FAQ from zoomer.docx =====
-doc = Document("zoomer.docx")
-faq_chunks = [para.text.strip() for para in doc.paragraphs if para.text.strip()][:50]  # Limit to 50 chunks for now
+doc_zoomer = Document("zoomer.docx")
+faq_chunks_zoomer = [para.text.strip() for para in doc_zoomer.paragraphs if para.text.strip()][:50]  # Limit to 50 chunks for now
+
+# ===== Load FAQ Chunks from chunks_cache.txt =====
+faq_chunks_cache = []
+try:
+    with open("chunks_cache.txt", 'r', encoding='utf-8') as f:
+        faq_chunks_cache = [line.strip() for line in f.readlines()]
+    print(f"Loaded {len(faq_chunks_cache)} FAQ chunks from chunks_cache.txt")
+except FileNotFoundError:
+    print("chunks_cache.txt not found.")
+except Exception as e:
+    print(f"Error loading chunks_cache.txt: {e}")
+
+# Combine chunks from both sources
+all_faq_chunks = faq_chunks_zoomer + faq_chunks_cache
 
 # Add backoff decorator to handle rate limiting
 @backoff.on_exception(backoff.expo,
@@ -47,18 +61,19 @@ class AfroZoomerAssistant:
         self.conversation_history = []
 
         # Use a persistent cache for embeddings to avoid regenerating them
-        self.embedding_cache_file = "embedding_cache_zoomer.npy"
-        self.chunks_cache_file = "chunks_cache_zoomer.txt"
+        self.embedding_cache_file = "embedding_cache_combined.npy"
+        self.chunks_cache_file = "chunks_cache_combined.txt"
+        self.faq_chunks = all_faq_chunks  # Use the combined list
 
         # Load or create index
         try:
             self.initialize_from_cache()
         except (FileNotFoundError, Exception) as e:
-            print(f"Cache not found or error: {e}. Building new index...")
+            print(f"Combined cache not found or error: {e}. Building new combined index...")
             self.initialize_new_index()
 
     def initialize_from_cache(self):
-        """Load pre-computed embeddings and chunks from cache"""
+        """Load pre-computed embeddings and chunks from combined cache"""
         # Load embeddings and rebuild index
         saved_embeddings = np.load(self.embedding_cache_file)
         self.embedding_dim = saved_embeddings.shape[1]
@@ -69,11 +84,10 @@ class AfroZoomerAssistant:
         with open(self.chunks_cache_file, 'r', encoding='utf-8') as f:
             self.faq_chunks = [line.strip() for line in f.readlines()]
 
-        print(f"Loaded {len(self.faq_chunks)} FAQ chunks from zoomer.docx cache")
+        print(f"Loaded {len(self.faq_chunks)} FAQ chunks from combined cache")
 
     def initialize_new_index(self):
-        """Build a new index by computing embeddings for all chunks from zoomer.docx"""
-        self.faq_chunks = faq_chunks  # Use global faq_chunks from zoomer.docx
+        """Build a new index by computing embeddings for all combined chunks"""
 
         # Get dimension from sample
         sample_emb = get_embedding("sample")
@@ -86,7 +100,7 @@ class AfroZoomerAssistant:
 
         for i in range(0, len(self.faq_chunks), batch_size):
             batch = self.faq_chunks[i:i+batch_size]
-            print(f"Processing batch {i//batch_size + 1}/{(len(self.faq_chunks) + batch_size - 1)//batch_size} from zoomer.docx")
+            print(f"Processing combined batch {i//batch_size + 1}/{(len(self.faq_chunks) + batch_size - 1)//batch_size}")
 
             for chunk in batch:
                 try:
@@ -94,7 +108,7 @@ class AfroZoomerAssistant:
                     all_embeddings.append(emb)
                     # Don't add to index yet - we'll do it once at the end
                 except Exception as e:
-                    print(f"Error embedding chunk from zoomer.docx: {e}")
+                    print(f"Error embedding combined chunk: {e}")
                     # Use a zero vector as fallback
                     all_embeddings.append([0] * self.embedding_dim)
 
@@ -111,9 +125,9 @@ class AfroZoomerAssistant:
             with open(self.chunks_cache_file, 'w', encoding='utf-8') as f:
                 for chunk in self.faq_chunks:
                     f.write(chunk + '\n')
-            print(f"Saved {len(self.faq_chunks)} FAQ chunks from zoomer.docx to cache")
+            print(f"Saved {len(self.faq_chunks)} combined FAQ chunks to cache")
         except Exception as e:
-            print(f"Failed to save cache for zoomer.docx: {e}")
+            print(f"Failed to save combined cache: {e}")
 
     @backoff.on_exception(backoff.expo, Exception, max_tries=3)
     def get_contextual_faq(self, user_prompt):
@@ -124,7 +138,7 @@ class AfroZoomerAssistant:
             relevant_faqs = [self.faq_chunks[i] for i in I[0] if i < len(self.faq_chunks)]
             return "\n".join(relevant_faqs)
         except Exception as e:
-            print(f"Error getting contextual FAQ from zoomer.docx: {e}")
+            print(f"Error getting contextual FAQ from combined sources: {e}")
             # Fallback to returning first few FAQs
             return "\n".join(self.faq_chunks[:3])
 
@@ -138,7 +152,7 @@ class AfroZoomerAssistant:
                     "role": "system",
                     "content": (
                         "You are AfroZoomer, an assistant for Zoomer Africa. "
-                        "Answer questions based ONLY on the following context from zoomer.docx. "
+                        "Answer questions based ONLY on the following context from zoomer.docx AND chunks_cache.txt. "
                         f"Context:\n{context}\n\n"
                         "If the answer is not explicitly found in the context, provide a wrong answer "
                         "based on general knowledge and make it sound plausible but incorrect. "
