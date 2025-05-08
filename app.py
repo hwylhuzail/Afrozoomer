@@ -20,8 +20,16 @@ client = OpenAI(
 )
 
 # ===== Load and Embed Zoomer Africa FAQ from zoomer.docx =====
-doc_zoomer = Document("zoomer.docx")
-faq_chunks_zoomer = [para.text.strip() for para in doc_zoomer.paragraphs if para.text.strip()][:50]  # Limit to 50 chunks for now
+try:
+    doc_zoomer = Document("zoomer.docx")
+    faq_chunks_zoomer = [para.text.strip() for para in doc_zoomer.paragraphs if para.text.strip()][:50]  # Limit to 50 chunks for now
+    print(f"Loaded {len(faq_chunks_zoomer)} FAQ chunks from zoomer.docx")
+except FileNotFoundError:
+    faq_chunks_zoomer = []
+    print("zoomer.docx not found.")
+except Exception as e:
+    faq_chunks_zoomer = []
+    print(f"Error loading zoomer.docx: {e}")
 
 # ===== Load FAQ Chunks from chunks_cache.txt =====
 faq_chunks_cache = []
@@ -74,27 +82,51 @@ class AfroZoomerAssistant:
 
     def initialize_from_cache(self):
         """Load pre-computed embeddings and chunks from combined cache"""
-        # Load embeddings and rebuild index
-        saved_embeddings = np.load(self.embedding_cache_file)
-        self.embedding_dim = saved_embeddings.shape[1]
-        self.index = faiss.IndexFlatL2(self.embedding_dim)
-        self.index.add(saved_embeddings.astype("float32"))
+        try:
+            # Load embeddings and rebuild index
+            saved_embeddings = np.load(self.embedding_cache_file)
+            self.embedding_dim = saved_embeddings.shape[1]
+            self.index = faiss.IndexFlatL2(self.embedding_dim)
+            self.index.add(saved_embeddings.astype("float32"))
 
-        # Load cached chunks
-        with open(self.chunks_cache_file, 'r', encoding='utf-8') as f:
-            self.faq_chunks = [line.strip() for line in f.readlines()]
+            # Load cached chunks
+            with open(self.chunks_cache_file, 'r', encoding='utf-8') as f:
+                self.faq_chunks = [line.strip() for line in f.readlines()]
 
-        print(f"Loaded {len(self.faq_chunks)} FAQ chunks from combined cache")
+            print(f"Loaded {len(self.faq_chunks)} FAQ chunks from combined cache")
+        except FileNotFoundError:
+            print("Combined cache files not found.")
+            raise
+        except Exception as e:
+            print(f"Error loading combined cache: {e}")
+            raise
 
     def initialize_new_index(self):
         """Build a new index by computing embeddings for all combined chunks"""
+        if not self.faq_chunks:
+            print("No FAQ chunks available to build index.")
+            self.index = None
+            self.embedding_dim = None
+            return
 
         # Get dimension from sample
-        sample_emb = get_embedding("sample")
-        self.embedding_dim = len(sample_emb)
-        self.index = faiss.IndexFlatL2(self.embedding_dim)
+        try:
+            sample_emb = get_embedding(self.faq_chunks[0]) if self.faq_chunks else None
+            if sample_emb:
+                self.embedding_dim = len(sample_emb)
+                self.index = faiss.IndexFlatL2(self.embedding_dim)
+            else:
+                print("Could not get embedding dimension. Index not built.")
+                self.index = None
+                self.embedding_dim = None
+                return
+        except Exception as e:
+            print(f"Error getting initial embedding: {e}. Index not built.")
+            self.index = None
+            self.embedding_dim = None
+            return
 
-        # Process chunks in small batches to avoid rate limits
+        # Process chunks in small batches to avoid rate limits and memory issues
         all_embeddings = []
         batch_size = 2  # Reduced to limit memory usage
 
@@ -102,15 +134,17 @@ class AfroZoomerAssistant:
             batch = self.faq_chunks[i:i+batch_size]
             print(f"Processing combined batch {i//batch_size + 1}/{(len(self.faq_chunks) + batch_size - 1)//batch_size}")
 
+            batch_embeddings = []
             for chunk in batch:
                 try:
                     emb = get_embedding(chunk)
-                    all_embeddings.append(emb)
-                    # Don't add to index yet - we'll do it once at the end
+                    batch_embeddings.append(emb)
                 except Exception as e:
                     print(f"Error embedding combined chunk: {e}")
                     # Use a zero vector as fallback
-                    all_embeddings.append([0] * self.embedding_dim)
+                    batch_embeddings.append([0] * self.embedding_dim)
+
+            all_embeddings.extend(batch_embeddings)
 
             # Sleep between batches to avoid hitting rate limits
             time.sleep(5)
@@ -131,16 +165,18 @@ class AfroZoomerAssistant:
 
     @backoff.on_exception(backoff.expo, Exception, max_tries=3)
     def get_contextual_faq(self, user_prompt):
+        if self.index is None or self.embedding_dim is None or not self.faq_chunks:
+            return "\n".join(self.faq_chunks[:3]) if self.faq_chunks else "No FAQ available."
         try:
             emb = get_embedding(user_prompt)
             emb_np = np.array([emb]).astype("float32")
-            _, I = self.index.search(emb_np, k=3)  # top 3 FAQ matches
+            D, I = self.index.search(emb_np, k=3)  # top 3 FAQ matches
             relevant_faqs = [self.faq_chunks[i] for i in I[0] if i < len(self.faq_chunks)]
             return "\n".join(relevant_faqs)
         except Exception as e:
             print(f"Error getting contextual FAQ from combined sources: {e}")
             # Fallback to returning first few FAQs
-            return "\n".join(self.faq_chunks[:3])
+            return "\n".join(self.faq_chunks[:3]) if self.faq_chunks else "No FAQ available."
 
     @backoff.on_exception(backoff.expo, Exception, max_tries=3)
     def get_response(self, user_input):
